@@ -1,6 +1,7 @@
 package com.example.social_network.controller;
 
 import com.example.social_network.dto.CreateUserDTO;
+import com.example.social_network.dto.GetUserDTO;
 import com.example.social_network.dto.UpdateUserDTO;
 import com.example.social_network.model.User;
 import com.example.social_network.repository.UserRepository;
@@ -21,15 +22,15 @@ public class UserController {
     private UserService userService;
 
     @GetMapping
-    public ResponseEntity<List<User>> getUsers() {
-        List<User> users = userService.getUsers();
+    public ResponseEntity<List<GetUserDTO>> getUsers() {
+        List<GetUserDTO> users = userService.getUsers();
 
         return ResponseEntity.status(HttpStatus.OK).body(users);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUser(@PathVariable UUID id) {
-        User user = userService.getUser(id);
+    public ResponseEntity<GetUserDTO> getUser(@PathVariable UUID id) {
+        GetUserDTO user = userService.getUser(id);
 
         return ResponseEntity.status(HttpStatus.OK).body(user);
     }
