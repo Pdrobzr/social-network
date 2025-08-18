@@ -2,11 +2,14 @@ package com.example.social_network.service;
 
 import com.example.social_network.dto.CreateUserDTO;
 import com.example.social_network.dto.GetUserDTO;
+import com.example.social_network.dto.LoginUserDTO;
 import com.example.social_network.dto.UpdateUserDTO;
 import com.example.social_network.model.Role;
 import com.example.social_network.model.User;
 import com.example.social_network.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +25,12 @@ public class UserService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private TokenService tokenService;
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
 
     public List<GetUserDTO> getUsers() {
         return userRepository.findAll().stream().map(user -> new GetUserDTO(user.getUserId(), user.getName(), user.getEmail(),
@@ -47,10 +56,16 @@ public class UserService {
         }
 
         var hashPassword = passwordEncoder.encode(createUserDTO.password());
-        User user = userRepository.save(new User(createUserDTO.name(), createUserDTO.email(), hashPassword, new Role(2, "USER")));
 
-        return user;
+        return userRepository.save(new User(createUserDTO.name(), createUserDTO.email(), hashPassword, new Role(2, "USER")));
 
+    }
+
+    public String loginUser(LoginUserDTO loginUserDTO) {
+        var userPassword = new UsernamePasswordAuthenticationToken(loginUserDTO.email(), loginUserDTO.password());
+        var auth = this.authenticationManager.authenticate(userPassword);
+
+        return tokenService.generateToken((User) auth.getPrincipal());
     }
 
     public User updateUser(UUID id, UpdateUserDTO updateUserDTO) {

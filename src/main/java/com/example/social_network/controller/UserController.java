@@ -2,6 +2,7 @@ package com.example.social_network.controller;
 
 import com.example.social_network.dto.CreateUserDTO;
 import com.example.social_network.dto.GetUserDTO;
+import com.example.social_network.dto.LoginUserDTO;
 import com.example.social_network.dto.UpdateUserDTO;
 import com.example.social_network.model.User;
 import com.example.social_network.repository.UserRepository;
@@ -40,6 +41,13 @@ public class UserController {
         User user = userService.createUser(createUserDTO);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(user);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<String> loginUser(@RequestBody LoginUserDTO loginUserDTO) {
+        String token = userService.loginUser(loginUserDTO);
+
+        return ResponseEntity.status(HttpStatus.OK).body(token);
     }
 
     @PutMapping("/{id}")
