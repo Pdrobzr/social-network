@@ -1,9 +1,6 @@
 package com.example.social_network.controller;
 
-import com.example.social_network.dto.CreateUserDTO;
-import com.example.social_network.dto.GetUserDTO;
-import com.example.social_network.dto.LoginUserDTO;
-import com.example.social_network.dto.UpdateUserDTO;
+import com.example.social_network.dto.*;
 import com.example.social_network.model.User;
 import com.example.social_network.repository.UserRepository;
 import com.example.social_network.service.UserService;
@@ -44,10 +41,10 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> loginUser(@RequestBody LoginUserDTO loginUserDTO) {
+    public ResponseEntity<ResponseLoginDTO> loginUser(@RequestBody LoginUserDTO loginUserDTO) {
         String token = userService.loginUser(loginUserDTO);
 
-        return ResponseEntity.status(HttpStatus.OK).body(token);
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseLoginDTO(token));
     }
 
     @PutMapping("/{id}")
