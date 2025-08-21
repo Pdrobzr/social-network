@@ -34,7 +34,7 @@ public class UserService {
 
     public List<GetUserDTO> getUsers() {
         return userRepository.findAll().stream().map(user -> new GetUserDTO(user.getUserId(), user.getName(), user.getEmail(),
-                user.getRole(), user.getCreatedAt())).toList();
+                user.getRole(), user.getCreatedAt(), user.getPosts())).toList();
     }
 
     public GetUserDTO getUser(UUID id) {
@@ -42,7 +42,7 @@ public class UserService {
 
         if (getUserById.isPresent()) {
             User user = getUserById.get();
-            return new GetUserDTO(user.getUserId(), user.getName(), user.getEmail(), user.getRole(), user.getCreatedAt());
+            return new GetUserDTO(user.getUserId(), user.getName(), user.getEmail(), user.getRole(), user.getCreatedAt(), user.getPosts());
         } else {
             throw new RuntimeException();
         }
@@ -79,7 +79,7 @@ public class UserService {
             }
 
             User updateUser = new User(id, updateUserDTO.name(), updateUserDTO.email(), getUserById.get().getPassword(),
-                    getUserById.get().getCreatedAt(), getUserById.get().getRole());
+                    getUserById.get().getCreatedAt(), getUserById.get().getRole(), getUserById.get().getPosts());
 
             return userRepository.save(updateUser);
 

@@ -4,6 +4,7 @@ import com.example.social_network.dto.*;
 import com.example.social_network.model.User;
 import com.example.social_network.repository.UserRepository;
 import com.example.social_network.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,21 +35,21 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody CreateUserDTO createUserDTO) {
+    public ResponseEntity<User> createUser(@RequestBody @Valid CreateUserDTO createUserDTO) {
         User user = userService.createUser(createUserDTO);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(user);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<ResponseLoginDTO> loginUser(@RequestBody LoginUserDTO loginUserDTO) {
+    public ResponseEntity<ResponseLoginDTO> loginUser(@RequestBody @Valid LoginUserDTO loginUserDTO) {
         String token = userService.loginUser(loginUserDTO);
 
         return ResponseEntity.status(HttpStatus.OK).body(new ResponseLoginDTO(token));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable UUID id, @RequestBody UpdateUserDTO updateUserDTO) {
+    public ResponseEntity<User> updateUser(@PathVariable UUID id, @RequestBody @Valid UpdateUserDTO updateUserDTO) {
         User user = userService.updateUser(id, updateUserDTO);
 
         return ResponseEntity.status(HttpStatus.OK).body(user);

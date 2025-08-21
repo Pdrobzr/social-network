@@ -8,10 +8,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Entity
 @Table(name = "users")
@@ -35,13 +32,17 @@ public class User implements UserDetails {
     @CreationTimestamp
     private LocalDateTime createdAt;
 
-    public User(UUID userId, String name, String email, String password, LocalDateTime createdAt, Role role) {
+    @OneToMany(mappedBy = "user")
+    private Set<Post> posts;
+
+    public User(UUID userId, String name, String email, String password, LocalDateTime createdAt, Role role, Set<Post> posts) {
         this.userId = userId;
         this.name = name;
         this.email = email;
         this.password = password;
         this.createdAt = createdAt;
         this.role = role;
+        this.posts = posts;
     }
 
     public User() {
@@ -110,5 +111,13 @@ public class User implements UserDetails {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public Set<Post> getPosts() {
+        return posts;
+    }
+
+    public void setPosts(Set<Post> posts) {
+        this.posts = posts;
     }
 }
