@@ -1,8 +1,7 @@
 package com.example.social_network.controller;
 
 import com.example.social_network.dto.CreatePostDTO;
-import com.example.social_network.dto.GetPostsDTO;
-import com.example.social_network.model.Post;
+import com.example.social_network.dto.GetPostDTO;
 import com.example.social_network.service.PostService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,9 +27,30 @@ public class PostController {
     }
 
     @GetMapping
-    public ResponseEntity<List<GetPostsDTO>> getPosts() {
-        List<GetPostsDTO> posts = postService.getPosts();
+    public ResponseEntity<List<GetPostDTO>> getPosts() {
+        List<GetPostDTO> posts = postService.getPosts();
 
         return ResponseEntity.status(HttpStatus.OK).body(posts);
+    }
+
+    @GetMapping("/{postId}")
+    public ResponseEntity<GetPostDTO> getPost(@PathVariable UUID postId) {
+        GetPostDTO getPost = postService.getPost(postId);
+
+        return ResponseEntity.status(HttpStatus.OK).body(getPost);
+    }
+
+    @PutMapping("/{postId}")
+    public ResponseEntity updatePost(@PathVariable UUID postId, @RequestBody @Valid CreatePostDTO createPostDTO) {
+        postService.updatePost(postId, createPostDTO);
+
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    @DeleteMapping("/{postId}")
+    public ResponseEntity deletePost(@PathVariable UUID postId) {
+        postService.deletePost(postId);
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }
