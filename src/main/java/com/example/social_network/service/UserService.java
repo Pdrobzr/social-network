@@ -1,9 +1,6 @@
 package com.example.social_network.service;
 
-import com.example.social_network.dto.CreateUserDTO;
-import com.example.social_network.dto.GetUserDTO;
-import com.example.social_network.dto.LoginUserDTO;
-import com.example.social_network.dto.UpdateUserDTO;
+import com.example.social_network.dto.*;
 import com.example.social_network.model.Role;
 import com.example.social_network.model.User;
 import com.example.social_network.repository.UserRepository;
@@ -33,8 +30,10 @@ public class UserService {
     private AuthenticationManager authenticationManager;
 
     public List<GetUserDTO> getUsers() {
+
         return userRepository.findAll().stream().map(user -> new GetUserDTO(user.getUserId(), user.getName(), user.getEmail(),
-                user.getRole(), user.getCreatedAt(), user.getPosts())).toList();
+                user.getRole(), user.getCreatedAt(), user.getPosts().stream().
+                map(post -> new GetPostsByUserDTO(post.getPostId(), post.getTitle(), post.getContent(), post.getCreatedAt())).toList())).toList();
     }
 
     public GetUserDTO getUser(UUID id) {
@@ -42,7 +41,8 @@ public class UserService {
 
         if (getUserById.isPresent()) {
             User user = getUserById.get();
-            return new GetUserDTO(user.getUserId(), user.getName(), user.getEmail(), user.getRole(), user.getCreatedAt(), user.getPosts());
+            return new GetUserDTO(user.getUserId(), user.getName(), user.getEmail(), user.getRole(), user.getCreatedAt(), user.getPosts().stream().
+                    map(post -> new GetPostsByUserDTO(post.getPostId(), post.getTitle(), post.getContent(), post.getCreatedAt())).toList());
         } else {
             throw new RuntimeException();
         }

@@ -4,8 +4,9 @@ import com.example.social_network.model.Post;
 import com.example.social_network.model.Role;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
-public record GetUserDTO(UUID id, String name, String email, Role role, LocalDateTime createdAt, Set<Post> posts) {
+public record GetUserDTO(UUID id, String name, String email, Role role, LocalDateTime createdAt, List<GetPostsByUserDTO> posts) {
 }

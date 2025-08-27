@@ -15,6 +15,9 @@ public class Post {
     private UUID postId;
 
     @Column(nullable = false)
+    private String title;
+
+    @Column(nullable = false)
     private String content;
 
     @CreationTimestamp
@@ -24,14 +27,16 @@ public class Post {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    public Post(UUID postId, String content, LocalDateTime createdAt, User user) {
+    public Post(UUID postId, String title, String content, LocalDateTime createdAt, User user) {
         this.postId = postId;
+        this.title = title;
         this.content = content;
         this.createdAt = createdAt;
         this.user = user;
     }
 
-    public Post(String content, User user) {
+    public Post(String title, String content, User user) {
+        this.title = title;
         this.content = content;
         this.user = user;
     }
@@ -45,6 +50,14 @@ public class Post {
 
     public void setPostId(UUID postId) {
         this.postId = postId;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getContent() {

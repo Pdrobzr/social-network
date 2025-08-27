@@ -26,7 +26,7 @@ public class PostService {
         Optional<User> getUser = userRepository.findById(userId);
 
         if(getUser.isPresent()) {
-            Post createPost = new Post(createPostDTO.content(), getUser.get());
+            Post createPost = new Post(createPostDTO.title(), createPostDTO.content(), getUser.get());
             postRepository.save(createPost);
         } else {
             throw new RuntimeException();
@@ -34,15 +34,15 @@ public class PostService {
     }
 
     public List<GetPostDTO> getPosts() {
-        return postRepository.findAll().stream().map(post -> new GetPostDTO(post.getPostId(), post.getContent(), post.getCreatedAt(),
-                post.getUser().getUserId())).toList();
+        return postRepository.findAll().stream().map(post -> new GetPostDTO(post.getPostId(), post.getTitle(), post.getContent(),
+                post.getCreatedAt(), post.getUser().getUserId())).toList();
     }
 
     public GetPostDTO getPost(UUID postId) {
         Optional<Post> findPost = postRepository.findById(postId);
         if(findPost.isPresent()) {
             Post getPost = findPost.get();
-            return new GetPostDTO(getPost.getPostId(), getPost.getContent(), getPost.getCreatedAt(), getPost.getUser().getUserId());
+            return new GetPostDTO(getPost.getPostId(), getPost.getTitle(), getPost.getContent(), getPost.getCreatedAt(), getPost.getUser().getUserId());
         } else {
             throw new RuntimeException();
         }
@@ -54,7 +54,7 @@ public class PostService {
         if(findPost.isPresent()) {
             Post getPost = findPost.get();
 
-            postRepository.save(new Post(postId, createPostDTO.content(), getPost.getCreatedAt(), getPost.getUser()));
+            postRepository.save(new Post(postId, createPostDTO.title(), createPostDTO.content(), getPost.getCreatedAt(), getPost.getUser()));
 
         } else {
             throw new RuntimeException();
